@@ -2,30 +2,37 @@ import requests
 from bs4 import BeautifulSoup
 from pprint import pprint
 
-# data = {'id': '6231',
-#         'table_name': 'med_products',
-#         'fancybox': 'true'}
-#
-# headers = {'Accept': '*/*',
-# 'Accept-Encoding': 'gzip, deflate, br',
-# 'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
-# 'Connection': 'keep-alive',
-# 'Cookie': '_ym_uid=163205177663442347; _ym_d=1632051776; uid=3230190944360843000; _ym_isad=2; _ym_visorc=w; sputnik_session=1644580559537|1',
-# 'DNT': '1',
-# 'Host': 'roszdravnadzor.gov.ru',
-# 'If-Modified-Since': 'Fri, 11 Feb 2022 12:27:17 GMT',
-# 'Referer': 'https://roszdravnadzor.gov.ru/',
-# 'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"',
-# 'sec-ch-ua-mobile': '?0',
-# 'sec-ch-ua-platform': "Windows",
-# 'Sec-Fetch-Dest': 'empty',
-# 'Sec-Fetch-Mode': 'cors',
-# 'Sec-Fetch-Site': 'same-origin',
-# 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36',
-# 'X-Requested-With': 'XMLHttpRequest'}
-#
-# res = requests.post('https://roszdravnadzor.gov.ru/services/misearch', headers=headers, data=data)
-# print(res.text)
+data = {'id': '1852',
+        'table_name': 'med_products',
+        'fancybox': 'true'}
+
+headers = {'Accept': '*/*',
+'Accept-Encoding': 'gzip, deflate, br',
+'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
+'Connection': 'keep-alive',
+'Cookie': '_ym_uid=163205177663442347; _ym_d=1632051776; uid=3230190944360843000; _ym_isad=2; _ym_visorc=w; sputnik_session=1644580559537|1',
+'DNT': '1',
+'Host': 'roszdravnadzor.gov.ru',
+'If-Modified-Since': 'Fri, 11 Feb 2022 12:27:17 GMT',
+'Referer': 'https://roszdravnadzor.gov.ru/',
+'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"',
+'sec-ch-ua-mobile': '?0',
+'sec-ch-ua-platform': "Windows",
+'Sec-Fetch-Dest': 'empty',
+'Sec-Fetch-Mode': 'cors',
+'Sec-Fetch-Site': 'same-origin',
+'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36',
+'X-Requested-With': 'XMLHttpRequest'}
+
+
+
+res = requests.post('https://roszdravnadzor.gov.ru/services/misearch', headers=headers, data=data)
+
+soup = BeautifulSoup(res.text, 'html.parser')
+unparsed = soup.find(class_="table-type-3")
+nkmi = unparsed.find_all()
+print(unparsed.getText)
+
 class NkmiSearcher:
     def ros_zdrav_list_search(self, name_search):
         data = {
@@ -66,20 +73,20 @@ class NkmiSearcher:
         for all in res_ls:
             res_ls_main = {}
             res_ls_main['id'] = all['col1']['label'].replace('o', '')
-            # res_ls_main['name']
+            res_ls_main['name_short'] = all['col5']['label'].replace('\r', '').replace('\n', ' ')
+            if 'title' in all['col5']:
+                res_ls_main['name_full'] = all['col5']['title']
+            res_ls_main['ru'] = all['col2']['label']
+            res_ls_main['owner'] = all['col9']['label']
             res_ls_main_all.append(res_ls_main)
 
-        return res_ls
+        return res_ls_main_all
 
-o = NkmiSearcher()
-pprint(o.ros_zdrav_list_search('перчатки'))
+# o = NkmiSearcher()
+# pprint(o.ros_zdrav_list_search('перчатки'))
 
 
-# for all in res.json()['data']:
-#     # print(all)
-#     print(all['col1']['label'].replace('o', ''))
-#
-#
+
 # headers = {'Accept': '*/*',
 #              'Accept-Encoding': 'gzip, deflate, br',
 #              'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
