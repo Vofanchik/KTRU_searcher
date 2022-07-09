@@ -42,7 +42,9 @@ class NkmiSearcher:
 
         res = requests.post('https://roszdravnadzor.gov.ru/ajax/services/misearch', headers=headers, data=data)
         res_ls = res.json()['data']
+        recs_total = res.json()['recordsTotal']
         res_ls_main_all = []
+        res_ls_main_all.append(recs_total)
         for all in res_ls:
             res_ls_main = {}
             res_ls_main['id'] = all['col1']['label'].replace('o', '')
@@ -104,36 +106,40 @@ class NkmiSearcher:
             return None
 
     def search_ktru_by_nkmi(self, name_search):
-        headers = {'Accept': '*/*',
-                   'Accept-Encoding': 'gzip, deflate, br',
-                   'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
-                   'Connection': 'keep-alive',
-                   'DNT': '1',
-                   'Host': 'zakupki.gov.ru',
-                   'Referer': 'https://zakupki.gov.ru/epz/ktru/search/results.html',
-                   'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"',
-                   'sec-ch-ua-mobile': '?0',
-                   'sec-ch-ua-platform': "Windows",
-                   'Sec-Fetch-Dest': 'empty',
-                   'Sec-Fetch-Mode': 'cors',
-                   'Sec-Fetch-Site': 'same-origin',
-                   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36',
-                   'X-Requested-With': 'XMLHttpRequest'}
+        try:
+            headers = {'Accept': '*/*',
+                       'Accept-Encoding': 'gzip, deflate, br',
+                       'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
+                       'Connection': 'keep-alive',
+                       'DNT': '1',
+                       'Host': 'zakupki.gov.ru',
+                       'Referer': 'https://zakupki.gov.ru/epz/ktru/search/results.html',
+                       'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"',
+                       'sec-ch-ua-mobile': '?0',
+                       'sec-ch-ua-platform': "Windows",
+                       'Sec-Fetch-Dest': 'empty',
+                       'Sec-Fetch-Mode': 'cors',
+                       'Sec-Fetch-Site': 'same-origin',
+                       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36',
+                       'X-Requested-With': 'XMLHttpRequest'}
 
-        data = {'searchString': f'{name_search}',
-                'ktruClassifierId': '296',
-                'source': 'M',
-                'recordsPerPage': '_500',
-                'search': 'true',
-                'medicalProduct': 'false'}
+            data = {'searchString': f'{name_search}',
+                    'ktruClassifierId': '296',
+                    'source': 'M',
+                    'recordsPerPage': '_500',
+                    'search': 'true',
+                    'medicalProduct': 'false'}
 
-        res = requests.post('https://zakupki.gov.ru/epz/ktru/ktruClassifiers/items.html', headers=headers, data=data)
+            res = requests.post('https://zakupki.gov.ru/epz/ktru/ktruClassifiers/items.html', headers=headers, data=data)
 
-        soup = BeautifulSoup(res.text, 'html.parser')
+            soup = BeautifulSoup(res.text, 'html.parser')
 
-        name = soup.find(class_="ktruClassifiersItems").get_text().replace('\n', '')[7:].strip()
+            name = soup.find(class_="ktruClassifiersItems").get_text().replace('\n', '')[7:].strip()
 
-        return name
+            return name
+
+        except:
+            return None
 
     def search_ktrus(self, ktru, quantity_items=5):
         try:
