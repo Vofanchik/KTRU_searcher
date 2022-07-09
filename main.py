@@ -1,10 +1,18 @@
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
+from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox, QDialog
 
 from User_inface import Ui_MainWindow
+from table_rzn_window import Ui_Dialog
 import NkmiSearcher
 import sys
 
+
+class EmployeeDlg(QDialog):
+    """Employee dialog."""
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.ui = Ui_Dialog()
+        self.ui.setupUi(self)
 
 class mywindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -14,6 +22,11 @@ class mywindow(QtWidgets.QMainWindow):
         self.search_class = NkmiSearcher.NkmiSearcher()
         self.ui.pushButton.clicked.connect(self.show_rzn_items)
         self.ui.pushButton_2.clicked.connect(self.button_search_ktru)
+        self.ui.pushButton_3.clicked.connect(self.onEmployeeBtnClicked)
+
+    def onEmployeeBtnClicked(self):
+        dlg = EmployeeDlg(self)
+        dlg.exec()
 
     def show_rzn_items(self):
         self.search_rzn = self.ui.lineEdit.text()
