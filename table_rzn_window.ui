@@ -16,10 +16,10 @@
   <widget class="QTableWidget" name="tableWidget">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>80</y>
-     <width>731</width>
-     <height>351</height>
+     <x>10</x>
+     <y>10</y>
+     <width>891</width>
+     <height>481</height>
     </rect>
    </property>
    <attribute name="horizontalHeaderHighlightSections">
@@ -32,18 +32,31 @@
     <bool>true</bool>
    </attribute>
    <attribute name="verticalHeaderVisible">
-    <bool>true</bool>
+    <bool>false</bool>
    </attribute>
-   <column>
-    <property name="text">
-     <string>Наименование</string>
-    </property>
-   </column>
    <column>
     <property name="text">
      <string>НКМИ</string>
     </property>
    </column>
+   <column>
+    <property name="text">
+     <string>Наименование</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>510</y>
+     <width>891</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Искать КТРУ</string>
+   </property>
   </widget>
  </widget>
  <resources/>

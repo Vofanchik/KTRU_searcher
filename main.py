@@ -14,6 +14,13 @@ class EmployeeDlg(QDialog):
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
 
+    def fill_dialog(self, lst):
+        for co, it in enumerate(lst):
+            self.ui.tableWidget.setRowCount(co + 1)
+            self.ui.tableWidget.setItem(co, 0, QTableWidgetItem(f"{it[0]}"))
+            self.ui.tableWidget.setItem(co, 1, QTableWidgetItem(f"{it[1]}"))
+
+
 class mywindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(mywindow, self).__init__()
@@ -25,7 +32,11 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.pushButton_3.clicked.connect(self.onEmployeeBtnClicked)
 
     def onEmployeeBtnClicked(self):
+        choice = self.ui.tableWidget.currentItem()
+        id = self.rzn_list[choice.row() + 1]['id']
+        resp = self.search_class.search_rzn_item(id)
         dlg = EmployeeDlg(self)
+        dlg.fill_dialog(resp)
         dlg.exec()
 
     def show_rzn_items(self):
