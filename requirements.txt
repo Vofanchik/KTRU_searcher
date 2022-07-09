@@ -1,2 +1,4 @@
 bs4
 requests
+PyQt5
+pyqt5-tools
