@@ -23,7 +23,9 @@ class EmployeeDlg(QDialog):
 
 
     def push_btn(self):
-        self.mywindow.cho = self.ui.tableWidget.currentItem().row()
+        self.mywindow.cho = self.ui.tableWidget.currentItem()
+        self.mywindow.dlg.hide()
+        self.mywindow.button_search_ktru()
 
 
 
@@ -36,6 +38,8 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.pushButton.clicked.connect(self.show_rzn_items)
         self.ui.pushButton_2.clicked.connect(self.button_search_ktru)
         self.ui.pushButton_3.clicked.connect(self.onEmployeeBtnClicked)
+
+        self.cho = None
 
     def onEmployeeBtnClicked(self):
         choice = self.ui.tableWidget.currentItem()
@@ -60,8 +64,10 @@ class mywindow(QtWidgets.QMainWindow):
 
     def button_search_ktru(self):
         # id = self.rzn_list[ret.row() + 1]['id']
-        ret = self.ui.tableWidget.currentItem()
-        print(self.cho)
+        if self.cho is not None:
+            ret = self.cho
+        else:
+            ret = self.ui.tableWidget.currentItem()
 
         if ret.text().isdigit and len(ret.text()) == 6:
             resp = self.search_class.search_ktru_by_nkmi(ret.text())
@@ -80,6 +86,7 @@ class mywindow(QtWidgets.QMainWindow):
         elif ret.text() == 'см. приложение':
             print('приложение')
 
+        self.cho = None
 
 app = QtWidgets.QApplication([])
 application = mywindow()
