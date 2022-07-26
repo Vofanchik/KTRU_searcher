@@ -42,14 +42,20 @@ class mywindow(QtWidgets.QMainWindow):
         self.cho = None
 
     def onEmployeeBtnClicked(self):
-        choice = self.ui.tableWidget.currentItem()
-        id = self.rzn_list[choice.row() + 1]['id']
-        resp = self.search_class.search_rzn_item(id)
-        self.dlg = EmployeeDlg(self)
-        self.dlg.fill_dialog(resp)
-        self.dlg.exec()
+        try:
+            choice = self.ui.tableWidget.currentItem()
+            id = self.rzn_list[choice.row() + 1]['id']
+            resp = self.search_class.search_rzn_item(id)
+            self.dlg = EmployeeDlg(self)
+            self.dlg.fill_dialog(resp)
+            self.dlg.exec()
+        except:
+            QMessageBox.critical(self, "Ошибка поиска",
+                                 "Приложения не существует",
+                                 QMessageBox.Ok)
 
     def show_rzn_items(self):
+
         self.search_rzn = self.ui.lineEdit.text()
         self.rzn_list = self.search_class.ros_zdrav_list_search(self.search_rzn, int(self.ui.comboBox.currentText()))
         self.ui.label_3.setText(str(self.rzn_list[0]))
@@ -61,6 +67,8 @@ class mywindow(QtWidgets.QMainWindow):
                 self.ui.tableWidget.setItem(co, 0, QTableWidgetItem(f"{it['name_short']}"))
 
             self.ui.tableWidget.setItem(co, 1, QTableWidgetItem(f"{it['nkmi']}"))
+
+
 
     def button_search_ktru(self):
         # id = self.rzn_list[ret.row() + 1]['id']
