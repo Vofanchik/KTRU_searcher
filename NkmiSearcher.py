@@ -40,7 +40,7 @@ class NkmiSearcher:
         'X-Requested-With': 'XMLHttpRequest'
         }
 
-        res = requests.post('https://roszdravnadzor.gov.ru/ajax/services/misearch', headers=headers, data=data)
+        res = requests.post('https://roszdravnadzor.gov.ru/ajax/services/misearch', headers=headers, data=data, verify=False)
         res_ls = res.json()['data']
         recs_total = res.json()['recordsTotal']
         res_ls_main_all = []
@@ -87,7 +87,7 @@ class NkmiSearcher:
                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36',
                        'X-Requested-With': 'XMLHttpRequest'}
 
-            res = requests.post('https://roszdravnadzor.gov.ru/services/misearch', headers=headers, data=data)
+            res = requests.post('https://roszdravnadzor.gov.ru/services/misearch', headers=headers, data=data, verify=False)
 
             soup = BeautifulSoup(res.text, 'html.parser')
             unparsed = soup.find(string="Модели медицинского изделия").parent.next_sibling.next_sibling.find_all('td')
